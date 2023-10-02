@@ -14,11 +14,11 @@ namespace DotNetCoreMVCDemo.Data
 {
     public class DotNetCoreMVCDemoContext : DbContext
     {
-        public DotNetCoreMVCDemoContext (DbContextOptions<DotNetCoreMVCDemoContext> options)
+        public DotNetCoreMVCDemoContext(DbContextOptions<DotNetCoreMVCDemoContext> options)
             : base(options)
         {
         }
-
+        
         public DbSet<DotNetCoreMVCDemo.Models.Movie> Movie { get; set; } = default!;
         public DbSet<DotNetCoreMVCDemo.Models.Tickets> Tickets { get; set; } = default!;
 
@@ -30,7 +30,7 @@ namespace DotNetCoreMVCDemo.Data
                 .WithMany(g => g.Tickets)
                 .HasForeignKey(s => s.MovieId)
                 .OnDelete(DeleteBehavior.Cascade);
-
+            
             modelBuilder
             .Entity<Tickets>()
             .Property(d => d.Gender)
