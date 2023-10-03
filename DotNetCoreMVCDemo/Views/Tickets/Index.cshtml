@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DotNetCoreMVCDemo.Models.Tickets>
+﻿@model IEnumerable<DotNetCoreMVCDemo.DomainLayer.Entity.Tickets>
 
 @{
     ViewData["Title"] = "Index";
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.CustomerName)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Movie.MovieName)
+                @Html.DisplayFor(modelItem => item.Movie.MovieName)
             </td>
             <td>
                @item.ShowDate.Value.ToString("dd/MMM/yyyy hh:mm tt")

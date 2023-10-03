@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DotNetCoreMVCDemo.DomainLayer.Entity;
 using Microsoft.EntityFrameworkCore;
-using DotNetCoreMVCDemo.Models;
-using System.Reflection.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Diagnostics.Metrics;
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DotNetCoreMVCDemo.Data
+namespace DotNetCoreMVCDemo.InfrastructureLayer.Data
 {
     public class DotNetCoreMVCDemoContext : DbContext
     {
@@ -19,8 +11,8 @@ namespace DotNetCoreMVCDemo.Data
         {
         }
         
-        public DbSet<DotNetCoreMVCDemo.Models.Movie> Movie { get; set; } = default!;
-        public DbSet<DotNetCoreMVCDemo.Models.Tickets> Tickets { get; set; } = default!;
+        public DbSet<Movie> Movie { get; set; } = default!;
+        public DbSet<Tickets> Tickets { get; set; } = default!;
 
         // SP: To set the One to Many relationship i table movie and ticket
         protected override void OnModelCreating(ModelBuilder modelBuilder)

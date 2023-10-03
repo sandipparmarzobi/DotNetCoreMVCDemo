@@ -1,8 +1,11 @@
-using DotNetCoreMVCDemo.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using DotNetCoreMVCDemo.Data;
+using DotNetCoreMVCDemo.Data.Repository;
+using DotNetCoreMVCDemo.DomainLayer.Entity;
+using DotNetCoreMVCDemo.DomainLayer.Interfaces;
+using DotNetCoreMVCDemo.InfrastructureLayer.Data;
+using DotNetCoreMVCDemo.InfrastructureLayer.Repositories;
 using DotNetCoreMVCDemo.Middleware;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,12 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 // Add services for the controller and views.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped<DotNetCoreMVCDemoContext, DotNetCoreMVCDemoContext>();
+builder.Services.AddScoped<TicketRepository, TicketRepository>();
+builder.Services.AddScoped<MovieRepository, MovieRepository>();
+//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 WebApplication app = builder.Build();
 

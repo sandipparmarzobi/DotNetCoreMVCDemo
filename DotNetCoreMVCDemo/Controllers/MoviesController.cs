@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DotNetCoreMVCDemo.DomainLayer.Entity;
+using DotNetCoreMVCDemo.InfrastructureLayer.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DotNetCoreMVCDemo.Data;
-using DotNetCoreMVCDemo.Models;
 
 namespace DotNetCoreMVCDemo.Controllers
 {

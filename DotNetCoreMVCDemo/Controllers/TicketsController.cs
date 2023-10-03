@@ -1,43 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DotNetCoreMVCDemo.Data.Repository;
+using DotNetCoreMVCDemo.DomainLayer.Entity;
+using DotNetCoreMVCDemo.DomainLayer.Interfaces;
+using DotNetCoreMVCDemo.InfrastructureLayer.Data;
+using DotNetCoreMVCDemo.InfrastructureLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DotNetCoreMVCDemo.Data;
-using DotNetCoreMVCDemo.Models;
 
 namespace DotNetCoreMVCDemo.Controllers
 {
     public class TicketsController : Controller
     {
-        private readonly DotNetCoreMVCDemoContext _context;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly TicketRepository _ticketRepository;
+        private readonly MovieRepository _movieRepository;
 
-        public TicketsController(DotNetCoreMVCDemoContext context)
+        public TicketsController(IUnitOfWork unitOfWork,TicketRepository ticketRepository, MovieRepository movieRepository)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _ticketRepository = ticketRepository;
+            _movieRepository = movieRepository;
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //SP: Include the movice refrence object in ticket list (relationship example)
-            return _context.Tickets != null ?
-                        View(await _context.Tickets.Include(x=>x.Movie).ToListAsync()) :
+            return _ticketRepository.GetTicketsIncludeMovie() != null ?
+                        View( _ticketRepository.GetTicketsIncludeMovie()) :
                         Problem("Entity set 'DotNetCoreMVCDemoContext.Tickets'  is null.");
         }
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Tickets == null)
+            if (id == null || _ticketRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var tickets = await _context.Tickets
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var tickets =  _ticketRepository.GetById(id);
             if (tickets == null)
             {
                 return NotFound();
@@ -50,7 +51,7 @@ namespace DotNetCoreMVCDemo.Controllers
         public async Task<IActionResult> Create(Guid? id)
         {
             Tickets ticket = new Tickets();
-            var movie = await _context.Movie.FindAsync(id);
+            var movie = _movieRepository.GetById(id);
             if (movie != null)
             {
                 ticket.Movie = movie;
@@ -68,8 +69,8 @@ namespace DotNetCoreMVCDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tickets);
-                await _context.SaveChangesAsync();
+                _ticketRepository.Add(tickets);
+                _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
             return View(tickets);
@@ -78,12 +79,11 @@ namespace DotNetCoreMVCDemo.Controllers
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Tickets == null)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            var tickets = await _context.Tickets.FindAsync(id);
+            var tickets = _ticketRepository.GetById(id);
             if (tickets == null)
             {
                 return NotFound();
@@ -96,9 +96,9 @@ namespace DotNetCoreMVCDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CustomerName,ShowDate,Gender,Amount,MovieId")] Tickets tickets)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,CustomerName,ShowDate,Gender,Amount,MovieId")] Tickets ticket)
         {
-            if (id != tickets.Id)
+            if (id != ticket.Id)
             {
                 return NotFound();
             }
@@ -107,12 +107,12 @@ namespace DotNetCoreMVCDemo.Controllers
             {
                 try
                 {
-                    _context.Update(tickets);
-                    await _context.SaveChangesAsync();
+                    _ticketRepository.UpdateState(ticket);
+                    _unitOfWork.Commit();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TicketsExists(tickets.Id))
+                    if (!_ticketRepository.IsExists(ticket))
                     {
                         return NotFound();
                     }
@@ -123,20 +123,18 @@ namespace DotNetCoreMVCDemo.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(tickets);
+            return View(ticket);
         }
 
         // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Tickets == null)
+            if (id == null || _ticketRepository.GetAll() == null)
             {
                 return NotFound();
             }
 
-            var tickets = await _context.Tickets
-                .FirstOrDefaultAsync(m => m.Id == id);
-            
+            var tickets = _ticketRepository.GetById(id);
             if (tickets == null)
             {
                 return NotFound();
@@ -150,23 +148,17 @@ namespace DotNetCoreMVCDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Tickets == null)
+            if (_ticketRepository.GetAll() == null)
             {
                 return Problem("Entity set 'DotNetCoreMVCDemoContext.Tickets'  is null.");
             }
-            var tickets = await _context.Tickets.FindAsync(id);
-            if (tickets != null)
+            var ticket = _ticketRepository.GetById(id);
+            if (ticket != null)
             {
-                _context.Tickets.Remove(tickets);
+                _ticketRepository.Remove(ticket);
+                _unitOfWork.Commit();
             }
-            
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TicketsExists(Guid id)
-        {
-          return (_context.Tickets?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
