@@ -22,5 +22,11 @@ namespace DotNetCoreMVCDemo.InfrastructureLayer.Repositories
         {
             return _dbContext.Tickets.Include(x => x.Movie).ToList();
         }
+
+        public List<Tickets>? SearchTicketByName(string Name)
+        {
+            var ticket= _dbContext.Tickets.Where(s => s.CustomerName!.Contains(Name)).ToList();
+            return ticket;
+        }
     }
 }

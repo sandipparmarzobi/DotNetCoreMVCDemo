@@ -6,6 +6,13 @@
 
 <h1>View Tickets</h1>
 
+<form asp-controller="Tickets" asp-action="Index" method="get">
+    <p>
+        Customer Name: <input type="text" name="SearchString" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>

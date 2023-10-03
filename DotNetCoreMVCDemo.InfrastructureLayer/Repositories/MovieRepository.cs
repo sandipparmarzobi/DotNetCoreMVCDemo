@@ -15,7 +15,7 @@ namespace DotNetCoreMVCDemo.Data.Repository
 
         public IList<Movie> GetMoviesIncludeTickets()
         {
-            return _dbContext.Movies.Include(x => x.Tickets).ToList();
+            return _dbContext.Movie.Include(x => x.Tickets).ToList();
         }
     }
 }

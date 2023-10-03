@@ -17,20 +17,20 @@ namespace DotNetCoreMVCDemo.Controllers
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-              return _context.Movies != null ? 
-                          View(await _context.Movies.ToListAsync()) :
+              return _context.Movie != null ? 
+                          View(await _context.Movie.ToListAsync()) :
                           Problem("Entity set 'DotNetCoreMVCDemoContext.Movie'  is null.");
         }
 
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null || _context.Movie == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
+            var movie = await _context.Movie    
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -65,12 +65,12 @@ namespace DotNetCoreMVCDemo.Controllers
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null || _context.Movie == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FirstOrDefaultAsync(x=>x.Id==id);
+            var movie = await _context.Movie.FirstOrDefaultAsync(x=>x.Id==id);
             if (movie == null)
             {
                 return NotFound();
@@ -116,12 +116,12 @@ namespace DotNetCoreMVCDemo.Controllers
         // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null || _context.Movie == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
+            var movie = await _context.Movie    
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
@@ -136,14 +136,14 @@ namespace DotNetCoreMVCDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Movies == null)
+            if (_context.Movie == null)
             {
                 return Problem("Entity set 'DotNetCoreMVCDemoContext.Movie'  is null.");
             }
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movie.FindAsync(id);
             if (movie != null)
             {
-                _context.Movies.Remove(movie);
+                _context.Movie.Remove(movie);
             }
             
             await _context.SaveChangesAsync();
@@ -152,7 +152,7 @@ namespace DotNetCoreMVCDemo.Controllers
 
         private bool MovieExists(Guid id)
         {
-          return (_context.Movies?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Movie?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

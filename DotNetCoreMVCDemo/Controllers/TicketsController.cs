@@ -20,6 +20,26 @@ namespace DotNetCoreMVCDemo.Controllers
             _ticketRepository = ticketRepository;
             _movieRepository = movieRepository;
         }
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchString)
+        {
+            if (_ticketRepository.GetAll() == null)
+            {
+                return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
+            }
+            List<Tickets> tickets = new List<Tickets>();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tickets = _ticketRepository.SearchTicketByName(searchString);
+            }
+            else
+            {
+                return _ticketRepository.GetTicketsIncludeMovie() != null ?
+                        View(_ticketRepository.GetTicketsIncludeMovie()) :
+                        Problem("Entity set 'DotNetCoreMVCDemoContext.Tickets'  is null.");
+            }
+            return View(tickets);
+        }
 
         // GET: Tickets
         public IActionResult Index()
