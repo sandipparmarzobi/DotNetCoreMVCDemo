@@ -1,4 +1,6 @@
-﻿namespace DotNetCoreMVCDemo.DomainLayer.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DotNetCoreMVCDemo.DomainLayer.Entity
 {
     public class Movie
     {
@@ -9,6 +11,5 @@
         public string? Genre { get; set; }
         public decimal Price { get; set; }
         public  ICollection<Tickets>? Tickets { get; set; }
-
     }
 }
