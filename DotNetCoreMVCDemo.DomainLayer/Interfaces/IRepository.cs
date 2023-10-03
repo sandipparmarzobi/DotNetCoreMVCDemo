@@ -5,7 +5,8 @@
         T GetById(object id);
         IList<T> GetAll();
         void Add(T entity);
-
+        void Remove(T entity);
         void UpdateState(T entity);
+        bool IsExists(T entity);
     }
 }

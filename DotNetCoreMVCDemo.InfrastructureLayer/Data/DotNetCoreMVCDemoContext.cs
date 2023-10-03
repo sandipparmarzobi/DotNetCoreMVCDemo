@@ -11,7 +11,7 @@ namespace DotNetCoreMVCDemo.InfrastructureLayer.Data
         {
         }
         
-        public DbSet<Movie> Movie { get; set; } = default!;
+        public DbSet<Movie> Movies { get; set; } = default!;
         public DbSet<Tickets> Tickets { get; set; } = default!;
 
         // SP: To set the One to Many relationship i table movie and ticket
