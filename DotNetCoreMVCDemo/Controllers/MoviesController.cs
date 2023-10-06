@@ -8,16 +8,19 @@ namespace DotNetCoreMVCDemo.Controllers
     public class MoviesController : Controller
     {
         private readonly DotNetCoreMVCDemoContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MoviesController(DotNetCoreMVCDemoContext context)
+        public MoviesController(DotNetCoreMVCDemoContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Movies
         public async Task<IActionResult> Index()
         {
-              return _context.Movie != null ? 
+            _httpContextAccessor?.HttpContext?.Session.SetString("Session_Username", "sandip.parmar@zobiwebsolutions");
+            return _context.Movie != null ? 
                           View(await _context.Movie.ToListAsync()) :
                           Problem("Entity set 'DotNetCoreMVCDemoContext.Movie'  is null.");
         }
@@ -25,7 +28,7 @@ namespace DotNetCoreMVCDemo.Controllers
         // GET: Movies/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Movie == null)
+            if (id is null || _context.Movie is null)
             {
                 return NotFound();
             }

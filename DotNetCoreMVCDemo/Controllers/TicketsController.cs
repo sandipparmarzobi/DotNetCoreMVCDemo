@@ -13,12 +13,14 @@ namespace DotNetCoreMVCDemo.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly TicketRepository _ticketRepository;
         private readonly MovieRepository _movieRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TicketsController(IUnitOfWork unitOfWork,TicketRepository ticketRepository, MovieRepository movieRepository)
+        public TicketsController(IUnitOfWork unitOfWork,TicketRepository ticketRepository, MovieRepository movieRepository, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _ticketRepository = ticketRepository;
             _movieRepository = movieRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpGet]
         public async Task<IActionResult> Index(string searchString)
@@ -91,11 +93,16 @@ namespace DotNetCoreMVCDemo.Controllers
             {
                 _ticketRepository.Add(tickets);
                 _unitOfWork.Commit();
+                Thread th = new Thread(new ThreadStart(MyFunction));
+                th.Start();
                 return RedirectToAction(nameof(Index));
             }
             return View(tickets);
         }
-
+        void MyFunction()
+        {
+            // Some work here
+        }
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {

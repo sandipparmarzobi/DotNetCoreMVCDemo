@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,12 +35,14 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            <b>User : @HttpContextAccessor?.HttpContext?.Session.GetString("Session_Username")</b>
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - DotNetCoreMVCDemo 
+ 
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

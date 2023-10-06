@@ -38,12 +38,12 @@ namespace DotNetCoreMVCDemo.Middleware
         }
     }
 
-    public static class MiddlewareExtensions
-    {
-        public static IApplicationBuilder UseMyMiddleware(
-            this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<MyMiddleware>();
-        }
-    }
+    //public static class MiddlewareExtensions
+    //{
+    //    public static IApplicationBuilder UseMyMiddleware(
+    //        this IApplicationBuilder builder)
+    //    {
+    //        return builder.UseMiddleware<MyMiddleware>();
+    //    }
+    //}
 }
